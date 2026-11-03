@@ -35,3 +35,6 @@ npm run dev                    # http://localhost:3000
 - Never commit `.env.local` or `.data/`. Both are in `.gitignore`.
 - The calendar `.ics` links and the connector URL are secrets. Anyone with one can read what it points to.
 - Nothing here moves money. Plaid is used read-only.
+
+## License
+MIT. See [LICENSE](LICENSE).
