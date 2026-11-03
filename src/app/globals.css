@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* "Field map" theme: paper map by day, night-vision console by night.
+   --accent is the highlight color (glows, brackets, active tab). */
+:root {
+  color-scheme: light;
+  --page: #ecebe1;
+  --surface: #f6f5ee;
+  --ink: #111a15;
+  --ink-2: #46564c;
+  --muted: #7a857c;
+  --grid: #d9d8cb;
+  --axis: #b9b8a8;
+  --border: rgba(17, 40, 27, 0.16);
+  --accent: #1f7a4f;
+  --accent-soft: rgba(31, 122, 79, 0.1);
+  --on-accent: #ffffff;
+  --on-warning: #111a15;
+  --topo: rgba(60, 80, 55, 0.2);
+  --series-1: #1f7a4f;
+  --series-2: #c2620e;
+  --series-3: #1d6f9e;
+  --good: #1f8a3a;
+  --good-text: #17652b;
+  --warning: #d99a12;
+  --critical: #c23434;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #070b09;
+    --surface: #0c1310;
+    --ink: #d9e8de;
+    --ink-2: #93ab9c;
+    --muted: #61766a;
+    --grid: #16241d;
+    --axis: #26392f;
+    --border: rgba(120, 255, 180, 0.13);
+    --accent: #3ddc97;
+    --accent-soft: rgba(61, 220, 151, 0.09);
+    --on-accent: #04110a;
+    --topo: rgba(61, 220, 151, 0.14);
+    --series-1: #3ddc97;
+    --series-2: #f2a03d;
+    --series-3: #4cc3ff;
+    --good: #3ddc97;
+    --good-text: #3ddc97;
+    --warning: #f2c14e;
+    --critical: #ff5f5f;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #070b09;
+  --surface: #0c1310;
+  --ink: #d9e8de;
+  --ink-2: #93ab9c;
+  --muted: #61766a;
+  --grid: #16241d;
+  --axis: #26392f;
+  --border: rgba(120, 255, 180, 0.13);
+  --accent: #3ddc97;
+  --accent-soft: rgba(61, 220, 151, 0.09);
+  --on-accent: #04110a;
+  --topo: rgba(61, 220, 151, 0.14);
+  --series-1: #3ddc97;
+  --series-2: #f2a03d;
+  --series-3: #4cc3ff;
+  --good: #3ddc97;
+  --good-text: #3ddc97;
+  --warning: #f2c14e;
+  --critical: #ff5f5f;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-on-warning: var(--on-warning);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-good: var(--good);
+  --color-good-text: var(--good-text);
+  --color-warning: var(--warning);
+  --color-critical: var(--critical);
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, Consolas, monospace;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Taps on the menu glide to a section. Settling onto a section after you
+   stop scrolling is done by SectionSettle.tsx. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+.snap-section {
+  scroll-margin-top: 0.5rem;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Small uppercase console label, e.g. card titles. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* Panel with targeting-bracket corners and a faint glowing top edge. */
+.hud {
+  position: relative;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(90deg, transparent, var(--accent) 50%, transparent) top / 100% 1px no-repeat,
+    linear-gradient(180deg, var(--accent-soft), transparent 40%),
+    var(--surface);
+  border-radius: 4px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.hud::before,
+.hud::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--accent);
+  border-style: solid;
+  pointer-events: none;
+}
+.hud::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.hud::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+.hud:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 24px -8px var(--accent);
+}
+
+/* Blinking status dot. */
+.pulse {
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* Scroll effects, only where the browser supports them and motion is welcome:
+   panels rise in as they scroll into view; the map drifts slower than the page. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+    .topo-drift {
+      animation: drift linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes drift {
+  to {
+    transform: translateY(-18vh) rotate(4deg) scale(1.08);
+  }
+}
